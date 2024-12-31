@@ -22,7 +22,7 @@ export async function toggleBookInLibrary(bookId: string) {
   try {
     const exists = await kv.sismember(userBooksKey, bookId);
 
-    if (exists) {
+    if (exists === 1) {
       await kv.srem(userBooksKey, bookId);
     } else {
       await kv.sadd(userBooksKey, bookId);
@@ -66,7 +66,7 @@ export async function isBookInLibrary(bookId: string): Promise<boolean> {
 
   try {
     const userBooksKey = `user:${userId}:books`;
-    return await kv.sismember(userBooksKey, bookId);
+    return (await kv.sismember(userBooksKey, bookId)) === 1;
   } catch (error) {
     console.error("Error checking book status:", error);
     return false;
