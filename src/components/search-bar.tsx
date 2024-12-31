@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { searchBooks } from "@/services/books";
 import type { BookSearchResult } from "@/types/books";
 import Image from "next/image";

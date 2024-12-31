@@ -1,9 +1,9 @@
-import { BookSearchResult } from "@/types/books";
+import type { BookSearchResult, BookSearchResponse } from "@/types/books";
 
 export async function searchBooks(query: string): Promise<BookSearchResult[]> {
   if (!query.trim()) return [];
 
-  const API_KEY = "AIzaSyAdVkCcTZ99Omam_iNU-4UG6ieytmVmnss";
+  const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY;
 
   if (!API_KEY) {
     console.error("Google Books API key is not configured");
@@ -26,7 +26,6 @@ export async function searchBooks(query: string): Promise<BookSearchResult[]> {
     }
 
     const data = await response.json();
-    console.log("API Response:", data);
 
     // Validate the response structure
     if (!data || typeof data !== "object") {
@@ -35,6 +34,7 @@ export async function searchBooks(query: string): Promise<BookSearchResult[]> {
 
     // Check if we have items in the response
     if (!Array.isArray(data.items)) {
+      // This is not an error - it just means no results were found
       return [];
     }
 
@@ -52,6 +52,7 @@ export async function searchBooks(query: string): Promise<BookSearchResult[]> {
       },
     }));
   } catch (error) {
+    // Improved error logging
     if (error instanceof Error) {
       console.error("Error searching books:", {
         message: error.message,
