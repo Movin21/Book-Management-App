@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { BookOpen, Calendar, Globe, Star, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { BookDetails } from "@/types/books";
+import { ToggleLibraryButton } from "@/components/toggle-library-button";
+import { isBookInLibrary } from "@/app/actions/books";
 
 // Helper function to get a secure image URL
 function getSecureImageUrl(imageUrl: string | undefined): string {
@@ -59,7 +60,10 @@ async function getBookDetails(id: string): Promise<BookDetails | null> {
 }
 
 export default async function BookPage({ params }: { params: { id: string } }) {
-  const book = await getBookDetails(params.id);
+  const [book, inLibrary] = await Promise.all([
+    getBookDetails(params.id),
+    isBookInLibrary(params.id),
+  ]);
 
   if (!book) {
     notFound();
@@ -110,8 +114,13 @@ export default async function BookPage({ params }: { params: { id: string } }) {
             </div>
           </div>
           <div className="flex space-x-4 mb-6">
-            <Button>Add to My Books</Button>
-            <Button variant="outline">Write a Review</Button>
+            <ToggleLibraryButton
+              bookId={book.id}
+              title={book.title}
+              authors={book.authors}
+              thumbnail={book.imageLinks.thumbnail}
+              initialInLibrary={inLibrary}
+            />
           </div>
           <h2 className="text-xl font-semibold mb-2">Description</h2>
           <p className="text-gray-700">{book.description}</p>
