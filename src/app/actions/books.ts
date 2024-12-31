@@ -66,7 +66,7 @@ export async function isBookInLibrary(bookId: string): Promise<boolean> {
 
   try {
     const userBooksKey = `user:${userId}:books`;
-    return await kv.sismember(userBooksKey, bookId);
+    return (await kv.sismember(userBooksKey, bookId)) === 1;
   } catch (error) {
     console.error("Error checking book status:", error);
     return false;
