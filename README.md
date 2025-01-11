@@ -34,7 +34,7 @@ cd book-management-app
 npm install
 ```
 
-3. Create a `.env.local` file in the root directory with the following variables: (Temporarily added for easy observation)
+3. Create a `.env.local` file in the root directory with the following variables:
 ```env
 # Kinde Auth Configuration
 KINDE_CLIENT_ID=your_kinde_client_id
